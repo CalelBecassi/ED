@@ -36,17 +36,10 @@ int main(void)
 {
   Heap h; // construtor Heap()
   
-  for (int i = 10; i >= 0; i--)
+  for (int i = 1; i <= 10; i++)
     h.insere(i);
   printf("h:\n");
   h.escreve();
-
-  h.altera_prioridade(4, 30);
-
-  h.escreve();
-
-
-  exit(0);
 
   int v[] = {1,2,3,4,5};
   
@@ -266,5 +259,4 @@ void Heap::altera_prioridade(int i, int p) {
     S[i] = p;
     desce(i);
   }
-
 }
