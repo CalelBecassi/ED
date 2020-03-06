@@ -41,7 +41,7 @@ int main(void)
   printf("h:\n");
   h.escreve();
 
-  h.extrai_maxima();
+  h.altera_prioridade(4, 30);
 
   h.escreve();
 
@@ -146,7 +146,9 @@ Heap::Heap() {
 
 Heap::Heap(int n, int dados[]) :
   S(dados, dados + n) {
-  //TODO: implementar (constroi_max_heap)
+  
+  for(int i = (n / 2) - 1; i >= 0; i--)
+    desce(i);
 
 }
 
@@ -246,8 +248,12 @@ int Heap::consulta_maxima() {
 }
 
 int Heap::extrai_maxima() {
+  int max = S[0];
+
   altera_prioridade(0, (S[S.size() - 1]));
   S.pop_back();
+
+  return max;
 }
 
 void Heap::altera_prioridade(int i, int p) {
