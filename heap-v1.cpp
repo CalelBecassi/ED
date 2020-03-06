@@ -41,7 +41,10 @@ int main(void)
   printf("h:\n");
   h.escreve();
 
-  printf("%d\n", h.consulta_maxima());
+  h.extrai_maxima();
+
+  h.escreve();
+
 
   exit(0);
 
@@ -243,11 +246,19 @@ int Heap::consulta_maxima() {
 }
 
 int Heap::extrai_maxima() {
-  
-
+  altera_prioridade(0, (S[S.size() - 1]));
+  S.pop_back();
 }
 
 void Heap::altera_prioridade(int i, int p) {
-  //TODO: implementar
+  if(p > S[i]){
+    S[i] = p;
+    sobe(i);
+  }
+
+  else{
+    S[i] = p;
+    desce(i);
+  }
 
 }
