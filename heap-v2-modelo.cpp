@@ -8,31 +8,31 @@ using std::string;
 class Heap
 {
 public:
+  int *S;//*****************ISSO TEM QUE SER PRIVADO!!!!!!!!!!!!!!!!!****************
   Heap();
-  Heap(const int n, const int dados[]);
+  /*Heap(const int n, const int dados[]);
   Heap(const Heap& outro);
   ~Heap();
   Heap& operator=(const Heap& outro);
-  void escreve_niveis();
-  void escreve(const string& prefixo = "", int i = 0);
+  void escreve_niveis();*/
+  //void escreve(const string& prefixo = "", int i = 0);
   void insere(int p);
-  int consulta_maxima();
-  int extrai_maxima();
-  void altera_prioridade(int i, int p);
+  //int consulta_maxima();
+  //int extrai_maxima();
+  //void altera_prioridade(int i, int p);
 
   
 private:
-  int *S;
-  int n = 0;
+  int n;
   int capacidade;
   static const int TAMANHO_INICIAL = 4;
   
-  int pai(int i);
+  /*int pai(int i);
   int esquerdo(int i);
   int direito(int i);
   void troca(int i, int j);
   void desce(int i);
-  void sobe(int i);
+  void sobe(int i);*/
 };
 
 
@@ -40,11 +40,18 @@ int main(void)
 {
   Heap h; // construtor Heap()
   
-  for (int i = 1; i <= 10; i++)
+  for (int i = 1; i <= 10; i++){
     h.insere(i);
+    printf("%d\n", h.S[i]);
+  }
+  
   printf("h:\n");
-  h.escreve();
+  for (int i = 1; i <= 10; i++)
+    printf("%d\n", h.S[i]);
 
+  return 0;}
+
+/*
   h.extrai_maxima();
   h.altera_prioridade(0, -3);
   printf("h:\n");
@@ -84,137 +91,35 @@ int main(void)
   h.escreve();
     
   return 0;
-}
-
-//*************************************
-//*** IMPLEMENTAÇÕES DA CLASSE HEAP ***
-//*************************************
+}*/
 
 Heap::Heap() {
-    S = new int[TAMANHO_INICIAL];
-}
-
-Heap::Heap(int n, int dados[]) :
-  S(dados, dados + n) {
-  
-  for(int i = (n / 2) - 1; i >= 0; i--)
-    desce(i);
-
-}
-
-Heap::~Heap() {
-}
-
-void Heap::escreve_niveis() {
-  int escritos = 0, fim_nivel = 1;
-
-  for(auto const& elemento: S) {
-  // Equivalente a for (unsigned i = 0; i < S.size(); i++) { printf("%d ", S[i]);
-    printf("%d ", elemento);
-    if (++escritos == fim_nivel) {
-      putchar('\n');
-      fim_nivel *= 2;
-      escritos = 0;
-    }
-  }
-  putchar('\n');
-}
-
-void Heap::escreve(const string& prefixo, int i) {
-  if (i < (int) S.size()) {
-    bool ehEsquerdo = i % 2 != 0;
-    bool temIrmao = i < (int) S.size()-1;
-    
-    printf(prefixo.c_str());
-    printf(ehEsquerdo and temIrmao ? "├──" : "└──" );
-
-    printf("%d\n", S[i]);
-      
-    escreve(prefixo + (ehEsquerdo ? "│   " : "    "), esquerdo(i));
-    escreve(prefixo + (ehEsquerdo ? "│   " : "    "), direito(i));
-  }
-}
-
-int Heap::pai(int i) {
-  return (i - 1) / 2;
-}
-
-int Heap::esquerdo(int i) {
-  return 2 * (i + 1) - 1;
-}
-
-int Heap::direito(int i) {
-  return 2 * (i + 1);
-}
-
-void Heap::troca(int i, int j) {
-  int aux = S[i];
-  S[i] = S[j];
-  S[j] = aux;
-}
-
-void Heap::desce(int i) {
-
-    while ((S[i] < S[esquerdo(i)]) || (S[i] < S[direito(i)])){
-
-      if (S[i] < S[esquerdo(i)]){
-          if (S[esquerdo(i)] > S[direito(i)]){
-            troca(i, esquerdo(i));
-            i = esquerdo(i);
-          }
-          else{
-            troca(i, direito(i));
-            i = direito(i);
-          }
-      }
-
-     if(S[i] < S[direito(i)]){
-         if (S[esquerdo(i)] < S[direito(i)]){
-            troca(i, direito(i));
-            i = direito(i);
-          }
-          else{
-            troca(i, esquerdo(i));
-            i = esquerdo(i);
-          }
-     }
-  }
-}
-
-void Heap::sobe(int i) {
-  while (S[pai(i)] < S[i]) {
-    troca(i, pai(i));
-    i = pai(i);
-  }
+  S = new int[TAMANHO_INICIAL];
+  n = 1;
+  capacidade = TAMANHO_INICIAL;
 }
 
 void Heap::insere(int p) {
   if(n <= capacidade){
-    *S[n+1] = p; 
-  }
-}
-
-int Heap::consulta_maxima() {
-  return S[0];
-}
-
-int Heap::extrai_maxima() {
-  int max = S[0];
-
-  altera_prioridade(0, (S[S.size() - 1]));
-  S.pop_back();
-
-  return max;
-}
-
-void Heap::altera_prioridade(int i, int p) {
-  if(p > S[i]){
-    S[i] = p;
-    sobe(i);
+    S[n] = p;
+    n++;
   }
 
   else{
-    S[i] = p;
-    desce(i);
+    capacidade = capacidade * 2;
+    int *novo = new int[capacidade];
+
+    for(int i = 1; i <= n; i++)
+      novo[i] = S[i];
+
+    delete[] S;
+    S = novo;
   }
 }
+
+/*void Heap::sobe(int i) {
+  while (S[pai(i)] < S[i]) {
+    troca(i, pai(i));
+    i = pai(i);
+  }
+}*/
